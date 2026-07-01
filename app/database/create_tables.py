@@ -7,8 +7,8 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS customers (
     customer_id SERIAL PRIMARY KEY,
     full_name VARCHAR(100),
-    email VARCHAR(100) UNIQUE,
-    country VARCHAR(50),
+    email VARCHAR(255) UNIQUE,
+    country VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 """)
