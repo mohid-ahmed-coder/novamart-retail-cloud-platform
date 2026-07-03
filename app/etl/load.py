@@ -1,23 +1,41 @@
+from psycopg2.extras import execute_batch
 from app.database.connection import get_connection
 
+
 def load_customers(customers):
-    connection = get_connection()
-    cursor = connection.cursor()
+    connection = None
 
-    for customer in customers:
-        cursor.execute(
-            """
-            INSERT INTO customers(full_name, email, country)
-            VALUES (%s, %s, %s)
-            """,
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+
+        query = """
+        INSERT INTO customers(full_name,email,country)
+        VALUES (%s,%s,%s)
+        """
+
+        data = [
             (
-                customer["name"],
-                customer["email"],
-                customer["country"]
+                c["name"],
+                c["email"],
+                c["country"]
             )
-        )
+            for c in customers
+        ]
 
-    connection.commit()
+        execute_batch(cursor, query, data)
 
-    cursor.close()
-    connection.close()
+        connection.commit()
+
+        print(f"Loaded {len(customers)} customers.")
+
+    except Exception as e:
+        print("Database Error:", e)
+
+        if connection:
+            connection.rollback()
+
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
