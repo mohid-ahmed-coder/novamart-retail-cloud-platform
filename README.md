@@ -138,7 +138,7 @@ Logging
 Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/mohid-ahmed-coder/novamart-retail-cloud-platform
 cd novamart
 ```
 
