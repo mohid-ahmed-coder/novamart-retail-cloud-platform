@@ -1,6 +1,7 @@
 import logging
 import time
 
+from app.etl.export import export_customers
 from config import CUSTOMER_COUNT
 from app.etl.extract import extract_customers
 from app.etl.transform import transform_customers
@@ -21,6 +22,9 @@ logging.info(f"Extracted {len(customers)} customers.")
 
 customers = transform_customers(customers)
 logging.info("Transformation completed.")
+
+export_customers(customers)
+logging.info("CSV exported.")
 
 load_customers(customers)
 logging.info("Customers loaded into PostgreSQL.")
